@@ -15,7 +15,7 @@ module Datadog
 
       def call(env)
         req = ::Rack::Request.new(env)
-        request_path = env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "") 
+        request_path = env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
         host = "host:#{ENV['INSTRUMENTATION_HOSTNAME'] || Socket.gethostname}"
         method = "method:#{req.request_method}"
         path = "path:#{request_path}"
