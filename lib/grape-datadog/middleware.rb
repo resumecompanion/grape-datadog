@@ -18,9 +18,10 @@ module Datadog
         request_path = env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "") 
         host = "host:#{ENV['INSTRUMENTATION_HOSTNAME'] || Socket.gethostname}"
         method = "method:#{req.request_method}"
-        tags = [host, method]
+        path = "path:#{request_path}"
+        tags = [host, method, path]
 
-        metric_name  = "grape.#{request_path}"
+        metric_name  = "grape.request"
         $statsd.time "#{metric_name}.time", :tags => tags do
           res = @app.call(env)
           status, _, _ = res
