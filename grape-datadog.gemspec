@@ -18,5 +18,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_runtime_dependency(%q<grape>)
-  gem.add_runtime_dependency(%q<dogstatsd-ruby>)
+  gem.add_runtime_dependency(%q<dogstatsd-ruby>, '=2.0.0')
 end

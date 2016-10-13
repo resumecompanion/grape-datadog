@@ -1,9 +1,9 @@
 require 'grape'
-require 'statsd'
+require 'datadog/statsd'
 require 'socket'
 
 if !defined? $statsd then
-  $statsd = Statsd.new(ENV['STATSD_HOST'] || "localhost", ENV['STATSD_PORT'] || 8125)
+  $statsd = Datadog::Statsd.new(ENV['STATSD_HOST'] || "localhost", ENV['STATSD_PORT'] || 8125)
 end
 
 module Datadog
