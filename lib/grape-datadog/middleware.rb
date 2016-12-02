@@ -9,8 +9,9 @@ end
 module Datadog
   module Grape
     class Middleware < ::Grape::Middleware::Base
-      def initialize(app)
+      def initialize(app, options = {})
         @app = app
+        @options = options
       end
 
       def call(env)
@@ -19,8 +20,7 @@ module Datadog
         host = "host:#{ENV['INSTRUMENTATION_HOSTNAME'] || Socket.gethostname}".underscore
         method = "method:#{req.request_method}"
         path = "path:#{request_path}"
-        tags = [host, method, path]
-
+        tags = [host, method, path, "env:#{@options[:chef_env]}"]
         metric_name  = "grape.request"
         $statsd.time "#{metric_name}.time", :tags => tags do
           res = @app.call(env)
