@@ -34,7 +34,7 @@ module Datadog
       private
 
       def request_path_in_datadog_format(env)
-        env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
+        env['api.endpoint'].routes.first.path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
       end
     end
   end
