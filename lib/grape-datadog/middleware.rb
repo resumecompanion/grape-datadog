@@ -16,8 +16,8 @@ module Datadog
 
       def call(env)
         req = ::Rack::Request.new(env)
-        request_path = env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
-        host = "host:#{ENV['INSTRUMENTATION_HOSTNAME'] || Socket.gethostname}".underscore
+        request_path = request_path_in_datadog_format(env)
+        host = "host:#{ENV['INSTRUMENTATION_HOSTNAME'] || Socket.gethostname}"
         method = "method:#{req.request_method}"
         path = "path:#{request_path}"
         tags = [host, method, path, "env:#{@options[:chef_env]}"]
@@ -29,6 +29,12 @@ module Datadog
           $statsd.increment metric_name, :tags => tags
           res
         end
+      end
+
+      private
+
+      def request_path_in_datadog_format(env)
+        env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
       end
     end
   end

@@ -23,6 +23,7 @@ describe Datadog::Grape::Middleware do
       timing.should be > 1000
       expect(params[:tags]).to include('method:GET', 'status:200', 'path:echo.{key1}.{key2}')
     end
+
     get "/echo/1/1234"
     last_response.status.should == 200
     last_response.body.should == "1 1234"

@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ["lib"]
 
-  gem.add_runtime_dependency(%q<grape>)
+  gem.add_runtime_dependency(%q<grape>, '~>0.19.2')
   gem.add_runtime_dependency(%q<dogstatsd-ruby>, '=2.0.0')
+  gem.add_development_dependency('pry-byebug')
 end

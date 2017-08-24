@@ -7,4 +7,5 @@ group :development, :test do
   gem "bundler", "~> 1.0"
   gem "rspec", "~> 2.6"
   gem "rack-test", "~> 0.6.2"
+  gem 'pry-byebug'
 end
