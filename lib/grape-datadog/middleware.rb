@@ -23,18 +23,25 @@ module Datadog
         tags = [host, method, path, "env:#{@options[:chef_env]}"]
         metric_name  = "grape.request"
         $statsd.time "#{metric_name}.time", :tags => tags do
-          res = @app.call(env)
+          begin
+            res = @app.call(env)
+          rescue
+            error = $!
+            res = Rack::Response.new([ error.message ], 500, { 'Content-type' => 'text/error' }).finish
+          end
           status, _, _ = res
           tags << "status:#{status}"
           $statsd.increment metric_name, :tags => tags
-          res
+          status == 500 ? (raise error) : res
         end
       end
 
       private
 
       def request_path_in_datadog_format(env)
-        env['api.endpoint'].routes.first.path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
+        path = env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
+        path.slice!('(.json)')
+        path
       end
     end
   end
