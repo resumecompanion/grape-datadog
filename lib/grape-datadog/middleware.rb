@@ -39,7 +39,7 @@ module Datadog
       private
 
       def request_path_in_datadog_format(env)
-        path = env['api.endpoint'].routes.first.route_path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
+        path = env['api.endpoint'].routes.first.path[1..-1].gsub("/", ".").sub(/\(\.:format\)\z/, "").gsub(/\.:(\w+)/, '.{\1}')
         path.slice!('(.json)')
         path
       end
